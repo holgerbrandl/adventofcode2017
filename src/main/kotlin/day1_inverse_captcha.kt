@@ -1,5 +1,3 @@
-package day1
-
 /**
  * @author Holger Brandl
  *

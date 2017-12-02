@@ -50,8 +50,6 @@ fun main(args: Array<String>) {
     // find the only two numbers in each row where one evenly divides the other - that is, where the result of the
     // division operation is a whole number. They would like you to find those numbers on each line, divide them,
     // and add up each line's result.
-
-
     fun rowCheckSum(row: List<Int>): Int = row.flatMap { a -> row.map { b -> a to b } }
         .filter { it.first > it.second }
         .first { (a, b) -> a.rem(b) == 0 }

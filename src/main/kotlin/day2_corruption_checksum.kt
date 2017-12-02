@@ -43,7 +43,7 @@ fun main(args: Array<String>) {
             it.max()!! - it.min()!!
         }
         .sum()
-    //        .also { println(it) }
+        .also { println(it) }
 
 
     // part2

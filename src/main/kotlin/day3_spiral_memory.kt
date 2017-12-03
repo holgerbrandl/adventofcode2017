@@ -47,7 +47,9 @@ val spiralSeq = buildSequence {
 
     while (true) {
         yield(curEl)
+
         if (grid.size.rem(10000) == 0) println("expanding grid to ${grid.size}")
+
         curEl = curEl.next(grid.dropLast(1))
         grid.add(curEl)
     }
@@ -63,13 +65,12 @@ fun main(args: Array<String>) {
 
     // part 1
     // shortest manhattan path from puzzle to origin
-    val last = seq.first()
-    println("num manhattan steps" + with(last) { abs(x) + abs(y) })
-    println("sum " + with(last) { sectorSum })
+    val puzzleNode = seq.first()
+    println("num manhattan steps" + with(puzzleNode) { abs(x) + abs(y) })
 
     // part2
-    // data f the element after the puzzle input
-    val first = seq.drop(1).first()
-    println("next puzzle sum: " + first.sectorSum)
+    // data for the node after the puzzle input
+    val afterPuzzleNode = seq.drop(1).first()
+    println("next puzzle sum: " + afterPuzzleNode.sectorSum)
 }
 

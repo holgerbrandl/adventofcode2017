@@ -21,7 +21,7 @@ fun main(args: Array<String>) {
         """.trimIndent()
 
 
-    // test-data
+    // test-sectorSum
     val testDataP1 = """
         5 1 9 5
         7 5 3
@@ -56,7 +56,7 @@ fun main(args: Array<String>) {
         .let { it.first / it.second }
 
 
-    data.lines().map { it.split(" ").map { it.toInt() } } // data prep
+    data.lines().map { it.split(" ").map { it.toInt() } } // sectorSum prep
         .map { rowCheckSum(it) }
         .sum()
         .also { println(it) }

@@ -2,11 +2,11 @@ import kotlin.coroutines.experimental.buildSequence
 import kotlin.math.abs
 
 
-data class DataElement(val sectorSum: Int, val x: Int, val y: Int)
+data class GridElement(val sectorSum: Int, val x: Int, val y: Int)
 data class Point(val x: Int, val y: Int)
 
 
-fun DataElement.next(grid: List<DataElement>): DataElement {
+fun GridElement.next(grid: List<GridElement>): GridElement {
     val context = listOf(
         Point(x + 1, y),
         Point(x, y - 1),
@@ -21,7 +21,7 @@ fun DataElement.next(grid: List<DataElement>): DataElement {
     val turn = circularized[predecessorPos + 1]
     val forward = circularized[predecessorPos + 2]
 
-    fun List<DataElement>.byPosition(p: Point) = firstOrNull { it.x == p.x && it.y == p.y }
+    fun List<GridElement>.byPosition(p: Point) = firstOrNull { it.x == p.x && it.y == p.y }
 
     // can we turn left? if not go straight in grid
     val newPos: Point = if (grid.byPosition(turn) == null) turn else forward
@@ -31,14 +31,14 @@ fun DataElement.next(grid: List<DataElement>): DataElement {
     }.map { grid.byPosition(it) }.filterNotNull() + this).sumBy { it.sectorSum }
 
 
-    return DataElement(neighborSum, newPos.x, newPos.y)
+    return GridElement(neighborSum, newPos.x, newPos.y)
 }
 
 
 val spiralSeq = buildSequence {
     val grid = listOf(
-        DataElement(1, 0, 0),
-        DataElement(1, 1, 0)
+        GridElement(1, 0, 0),
+        GridElement(1, 1, 0)
     ).toMutableList()
 
     yield(grid.first())

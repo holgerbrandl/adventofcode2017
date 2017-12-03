@@ -31,8 +31,6 @@ fun GridElement.next(grid: List<GridElement>): GridElement {
     }.map { grid.byPosition(it) }.filterNotNull() + this
     val neighborSum = neigbors.sumBy { it.sectorSum }
 
-    println("summing over ${neigbors.size} to $neighborSum")
-
     return GridElement(neighborSum, newPos.x, newPos.y)
 }
 
@@ -52,7 +50,6 @@ val spiralSeq = buildSequence {
 
         if (grid.size.rem(10000) == 0) println("expanding grid to ${grid.size}")
 
-        //        val dropInner = Math.min(0, 4 * Math.sqrt(grid.size.toDouble()).nextDown().toInt() -4)
         curEl = curEl.next(grid.dropLast(1))
         grid.add(curEl)
     }

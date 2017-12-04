@@ -9,7 +9,6 @@ fun main(args: Array<String>) {
     val data = File("day4_data.txt").readLines()
 
     // part1
-
     // 1. A passphrase consists of a series of words (lowercase letters) separated by spaces.
     // 2. To ensure security, a valid passphrase must contain no duplicate words.
     fun isValid(passphrase: String) = with(passphrase.split(" ")) {

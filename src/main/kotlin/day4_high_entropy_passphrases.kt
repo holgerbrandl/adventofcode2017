@@ -1,9 +1,5 @@
 import java.io.File
 
-/**
- * @author Holger Brandl
- */
-class Context
 
 fun main(args: Array<String>) {
     val data = File("day4_data.txt").readLines()
@@ -23,6 +19,4 @@ fun main(args: Array<String>) {
         passphrase.split(" ").map { it.toCharArray().sorted() }.run { distinct().size == size }
 
     println(data.count { isValidNoAnagram(it) })
-
-
 }

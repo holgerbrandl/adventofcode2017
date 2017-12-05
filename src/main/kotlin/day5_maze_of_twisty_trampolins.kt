@@ -1,9 +1,6 @@
 import java.io.File
 import kotlin.coroutines.experimental.buildSequence
 
-/**
- * @author Holger Brandl
- */
 
 var isPart1 = true // lazy hack to avoid more evolved maze builder
 

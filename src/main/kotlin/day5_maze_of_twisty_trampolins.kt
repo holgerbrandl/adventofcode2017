@@ -5,10 +5,10 @@ import kotlin.coroutines.experimental.buildSequence
  * @author Holger Brandl
  */
 
-var isPart1 = true // lazy hack
+var isPart1 = true // lazy hack to avoid more evolved maze builder
 
 data class MazeEl(val position: Int, var offset: Int) {
-    // part1
+
     fun increment() {
         if (isPart1) {
             offset++
@@ -26,8 +26,8 @@ data class MazeEl(val position: Int, var offset: Int) {
 }
 
 fun main(args: Array<String>) {
-    val data = File("day5_data.txt").readLines().map { it.toInt() }
     //    val data = listOf(0, 3, 0, 1, -3)
+    val data = File("day5_data.txt").readLines().map { it.toInt() }
 
     val theMaze: Sequence<MazeEl> = buildSequence {
         val maze = data.mapIndexed { index, instruction ->

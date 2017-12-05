@@ -5,42 +5,50 @@ import kotlin.coroutines.experimental.buildSequence
  * @author Holger Brandl
  */
 
-data class Jump(val offset: Int, var instruction: Int) {
+var isPart1 = true // lazy hack
+
+data class MazeEl(val position: Int, var offset: Int) {
+    // part1
     fun increment() {
-        instruction++
+        if (isPart1) {
+            offset++
+        } else {
+            if (offset > 2) {
+                offset--
+            } else {
+                offset++
+            }
+        }
     }
 
     val target: Int
-        get() = offset + instruction
+        get() = position + offset
 }
 
 fun main(args: Array<String>) {
     val data = File("day5_data.txt").readLines().map { it.toInt() }
-    //    val data = listOf(0,3,0,1,-3)
-    //    val data = listOf(-3)
+    //    val data = listOf(0, 3, 0, 1, -3)
 
-    val jumpSeq: Sequence<Jump> = buildSequence {
+    val theMaze: Sequence<MazeEl> = buildSequence {
         val maze = data.mapIndexed { index, instruction ->
-            Jump(index, instruction)
+            MazeEl(index, instruction)
         }
 
         val mazeDim = 0 until maze.size
         var cur = maze[0]
-
 
         while (cur.target in mazeDim) {
             val next = maze[cur.target]
             cur.increment()
             yield(next)
             cur = next
-            println(cur)
         }
     }
 
 
     //    follow the jumps until one leads outside the list.
-    println(jumpSeq.count() + 1)
+    println("part1: " + (theMaze.count() + 1))
 
-    // todo visualize the maze trip with kravis
-
+    isPart1 = false
+    println("part1: " + (theMaze.count() + 1))
 }

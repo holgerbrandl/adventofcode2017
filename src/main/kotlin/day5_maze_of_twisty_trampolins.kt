@@ -2,50 +2,33 @@ import java.io.File
 import kotlin.coroutines.experimental.buildSequence
 
 
-var isPart1 = true // lazy hack to avoid more evolved maze builder
-
-data class MazeEl(val position: Int, var offset: Int) {
-
-    fun increment() {
-        if (isPart1) {
-            offset++
-        } else {
-            if (offset > 2) {
-                offset--
-            } else {
-                offset++
-            }
-        }
-    }
-
-    val target: Int
-        get() = position + offset
-}
-
 fun main(args: Array<String>) {
-    //    val data = listOf(0, 3, 0, 1, -3)
+
+    // val data = listOf(0, 3, 0, 1, -3)
     val data = File("day5_data.txt").readLines().map { it.toInt() }
 
-    val theMaze: Sequence<MazeEl> = buildSequence {
+    val escapeSeq: Sequence<Int> = buildSequence {
+
         val maze = data.mapIndexed { index, instruction ->
-            MazeEl(index, instruction)
-        }
+            instruction
+        }.toMutableList()
 
-        val mazeDim = 0 until maze.size
-        var cur = maze[0]
+        var ptr = 0
 
-        while (cur.target in mazeDim) {
-            val next = maze[cur.target]
-            cur.increment()
-            yield(next)
-            cur = next
+        while (ptr in 0 until maze.size) {
+            yield(ptr)
+
+            val prevPtr = ptr
+            ptr += maze[ptr]
+
+            // part 1
+            maze[prevPtr] += 1
+
+            // part 2
+            //            maze[prevPtr] += if (maze[prevPtr] >= 3) -1 else 1
         }
     }
 
-
     //    follow the jumps until one leads outside the list.
-    println("part1: " + (theMaze.count() + 1))
-
-    isPart1 = false
-    println("part2: " + (theMaze.count() + 1))
+    println(escapeSeq.count())
 }

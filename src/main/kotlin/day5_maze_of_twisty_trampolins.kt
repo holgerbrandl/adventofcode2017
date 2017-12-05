@@ -47,5 +47,5 @@ fun main(args: Array<String>) {
     println("part1: " + (theMaze.count() + 1))
 
     isPart1 = false
-    println("part1: " + (theMaze.count() + 1))
+    println("part2: " + (theMaze.count() + 1))
 }

@@ -32,3 +32,4 @@ fun main(args: Array<String>) {
     //    follow the jumps until one leads outside the list.
     println(escapeSeq.count())
 }
+

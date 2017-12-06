@@ -17,10 +17,9 @@ fun main(args: Array<String>) {
             stateHistory.size to numInbetween
 
         } else {
-            val maxBank = memBanks.indexOfFirst { it == memBanks.max() }
+            val (maxBank, numBlocks) = memBanks.withIndex().maxBy { it.value }!!
 
-            // get value and reset
-            val numBlocks = memBanks[maxBank]
+            // reset bank
             memBanks[maxBank] = 0
 
             for (idx in (maxBank + 1) until (maxBank + 1 + numBlocks)) {
@@ -33,6 +32,6 @@ fun main(args: Array<String>) {
     }
 
     val cycleHistory = checkCycles(input)
-    println("part 1: cyleHistory until same bank config: ${cycleHistory.first}")
-    println("part 2: cyleHistory in between same bank config: ${cycleHistory.second}")
+    println("part 1: runs until same bank config: ${cycleHistory.first}")
+    println("part 2: run between same bank config: ${cycleHistory.second}")
 }

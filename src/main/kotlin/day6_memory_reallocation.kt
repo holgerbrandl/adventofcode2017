@@ -8,18 +8,18 @@ fun main(args: Array<String>) {
     //        val input = listOf(0, 2, 7, 0).toIntArray()
 
 
-    tailrec fun checkCycles(
-        memBanks: IntArray,
-        stateHistory: MutableList<String> = mutableListOf()
-    ): Pair<Int, Int> {
+    tailrec fun checkCycles(memBanks: IntArray, stateHistory: MutableList<String> = mutableListOf()): Pair<Int, Int> {
 
         val stateSnapshot = memBanks.joinToString()
+
         return if (stateHistory.contains(stateSnapshot)) {
             val numInbetween = stateHistory.size - stateHistory.indexOf(stateSnapshot)
             stateHistory.size to numInbetween
+
         } else {
             val maxBank = memBanks.indexOfFirst { it == memBanks.max() }
 
+            // get value and reset
             val numBlocks = memBanks[maxBank]
             memBanks[maxBank] = 0
 

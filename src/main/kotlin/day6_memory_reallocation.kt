@@ -9,7 +9,7 @@ fun main(args: Array<String>) {
 
 
     tailrec fun checkCycles(memBanks: IntArray, stateHistory: MutableList<String> = mutableListOf()): Pair<Int, Int> {
-
+        memBanks.hashCode()
         val stateSnapshot = memBanks.joinToString()
 
         return if (stateHistory.contains(stateSnapshot)) {

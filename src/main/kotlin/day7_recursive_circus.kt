@@ -42,26 +42,21 @@ fun main(args: Array<String>) {
         }
     }
 
-    fun Tower.getParent() = towers.firstOrNull { it.above.contains(name) }
-    fun List<Tower>.byName(name: String) = first { it.name == name }
+    fun Tower.getDisc() = towers.firstOrNull { it.above.contains(name) }
+    fun Tower.children() = above.map { tName -> towers.first { it.name == tName } }
 
-    fun Tower.children() = above.map { towers.byName(it) }
 
+    // part1: find the root of the tower of a single element
     tailrec fun Tower.findRoot(towers: List<Tower>): Tower {
-        val onTopOf = getParent()
+        val onTopOf = getDisc()
         return if (onTopOf == null) this else onTopOf.findRoot(towers)
     }
 
-    // part1: find the root of the tower of a single element
-    val root = towers.first().findRoot(towers)
-    println(root)
+    val root = towers.first().findRoot(towers).also { println(it) }
 
 
     // part2: find unbalanced program
-    //find disc with unbalanced weight
     fun Tower.totalWeight(): Int = weight + children().map { it.totalWeight() }.sum()
-
-    val unbalSubTree = towers.filter { it.children().map { it.totalWeight() }.distinct().size > 1 }
 
     //    for (t in unbalSubTree) {
     //        println("\nparent $t")
@@ -69,15 +64,17 @@ fun main(args: Array<String>) {
     //        t.children().forEach { println(it.toString() + " -> " + it.totalWeight()) }
     //    }
 
-    // select most specific tower
-    val unbalTower = unbalSubTree.sortedBy { it.totalWeight() }.first()
+    // select most unbalanced disc
+    val unbalancedDisc = towers
+        .filter { it.children().map { it.totalWeight() }.distinct().size > 1 }
+        .sortedBy { it.totalWeight() }.first()
 
-    // reveal the specic tower pm \\
-    val first = unbalTower.children().groupBy { it.totalWeight() }.toList().map { it.second }.let { disc ->
+    // calculate correct weight
+    unbalancedDisc.children().groupBy { it.totalWeight() }.toList().map { it.second }.let { disc ->
         val correctWeight = disc.first { it.size > 1 }.first().totalWeight()
-        val faultyTower = disc.first { it.size == 1 }.first()
+        val faultyChild = disc.first { it.size == 1 }.first()
 
-        val newWeight = faultyTower.weight - (faultyTower.totalWeight() - correctWeight)
+        val newWeight = faultyChild.weight - (faultyChild.totalWeight() - correctWeight)
         println("new weight ${newWeight}")
     }
 }

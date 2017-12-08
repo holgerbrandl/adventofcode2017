@@ -11,25 +11,8 @@ data class Tower(val name: String, val weight: Int, val above: List<String>) {
 }
 
 fun main(args: Array<String>) {
-
-    //        val data = """
-    //            pbga (66)
-    //            xhth (57)
-    //            ebii (61)
-    //            havc (66)
-    //            ktlj (57)
-    //            fwft (72) -> ktlj, cntj, xhth
-    //            qoyq (66)
-    //            padx (45) -> pbga, havc, qoyq
-    //            tknk (41) -> ugml, padx, fwft
-    //            jptl (61)
-    //            ugml (68) -> gyxo, ebii, jptl
-    //            gyxo (61)
-    //            cntj (57)
-    //            """.trimIndent().trim().lines()
-
-
     val data = File("day7_data.txt").readLines()
+    //    val data = File("day7_test_data.txt").readLines()
 
     // parse the data
     val towers = data.map {
@@ -58,11 +41,6 @@ fun main(args: Array<String>) {
     // part2: find unbalanced program
     fun Tower.totalWeight(): Int = weight + children().map { it.totalWeight() }.sum()
 
-    //    for (t in unbalSubTree) {
-    //        println("\nparent $t")
-    //        println("children:")
-    //        t.children().forEach { println(it.toString() + " -> " + it.totalWeight()) }
-    //    }
 
     // select most unbalanced disc
     val unbalancedDisc = towers

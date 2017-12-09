@@ -9,13 +9,11 @@ val data = File("day8_data.txt").readLines()
 
 val registers = mutableMapOf<String, Int>()
 
-fun regValue(name: String) = registers.getOrPut(name, { 0 })
-
 var maxValue = Integer.MIN_VALUE
 
 data.map { it.split(" ") }.forEach { line ->
     // check the predicate
-    val lhs = regValue(line[4])
+    val lhs = registers.getOrPut(line[4], { 0 })
     val rhs = line[6].toInt()
 
     val updateRegister = when (line[5]) {

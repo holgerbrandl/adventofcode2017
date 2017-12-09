@@ -1,5 +1,5 @@
 /**
- * @author Holger Brandl
+ * @author Karel Peeters (shared via slack)
  */
 
 fun main(args: Array<String>) {

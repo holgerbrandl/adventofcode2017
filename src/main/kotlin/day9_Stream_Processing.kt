@@ -10,12 +10,12 @@ fun main(args: Array<String>) {
     //    val input = "{{<ab>},{<ab>},{<ab>},{<ab>}}"
     //    val input = "{{<a!>},{<a!>},{<a!>},{<ab>}}"
 
-    val inputIterator = input.toCharArray().iterator()
-
-    inputIterator.nextChar()
+    val inputIterator = input.toCharArray().iterator().apply { nextChar() }
 
     val totalScore = processGroup(inputIterator, 1)
+
     println("total score is $totalScore")
+    println("amount ofgarbage in data $garbageCounter")
 }
 
 private fun processGroup(inputIterator: CharIterator, level: Int): Int {
@@ -23,9 +23,7 @@ private fun processGroup(inputIterator: CharIterator, level: Int): Int {
 
     while (inputIterator.hasNext()) {
         groupScore += when (inputIterator.nextChar()) {
-            ',' -> {
-                0
-            }
+            ',' -> 0
             '!' -> {
                 inputIterator.nextChar(); 0
             }
@@ -40,12 +38,16 @@ private fun processGroup(inputIterator: CharIterator, level: Int): Int {
     return groupScore
 }
 
+var garbageCounter = 0
+
 fun processGarbage(inputIterator: CharIterator): Int {
     while (true) {
         when (inputIterator.nextChar()) {
             '!' -> inputIterator.nextChar()
             '>' -> return 0
-            else -> 0
+            else -> {
+                garbageCounter++
+            }
         }
     }
 }

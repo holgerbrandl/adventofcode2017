@@ -4,76 +4,62 @@ import java.io.File
  * @author Holger Brandl
  */
 
-class Scanner(val range: Int) {
-    var state = 0
-    var isForward = true
+data class Scanner(val range: Int, var state: Int = 0, var isForward: Boolean = true) {
 
-    fun move() {
+    fun move() = apply {
         state += if (isForward) +1 else -1
 
         if (state == (range - 1)) isForward = false
         if (state == 0) isForward = true
     }
-
-    override fun toString(): String {
-        return "Scanner($range, $state)"
-    }
 }
 
-fun main(args: Array<String>) {
 
-    //        val firewall = File("day13_test_data.txt")
+fun buildFirewall(): Map<Int, Scanner> {
+    //            val firewall = File("day13_test_data.txt")
     val firewall = File("day13_data.txt")
         .readLines()
         .map { it.split(": ").map(String::toInt) }
         .associate { it[0] to it[1] }
 
+    return firewall.map { it.key to Scanner(it.value) }.toMap()
+}
 
-    val numLayers = firewall.map { it.key }.max()!!
-    val scanners = firewall.map { it.key to Scanner(it.value) }.toMap()
+val Map<Int, Scanner>.numLayers
+    get() = map { it.key }.max()!!
 
-    val sevScores = (0..numLayers).map { pos ->
-        scanners.get(pos)?.run {
+
+fun main(args: Array<String>) {
+    // part1
+    var firewall = buildFirewall()
+
+    val tripSeverity = (0..firewall.numLayers).map { pos ->
+        firewall.get(pos)?.run {
             if (state == 0) pos * range else null
         }.also {
-            // move all scanners forward
-//            println(scanners.entries)
-            scanners.values.forEach { it.move() }
+            firewall.values.forEach { it.move() }
         }
-    }
-    val tripSeverity = sevScores.filterNotNull().sum()
+    }.filterNotNull().sum()
 
     println("the severity of the trip was $tripSeverity")
 
     // part2
-    val minDelay = (0..Int.MAX_VALUE).asSequence().first {
-        isSneaky(firewall, it)
+    firewall = buildFirewall()
+
+    fun isSneaky(firewall: Map<Int, Scanner>): Boolean = (0..firewall.numLayers).none { pos ->
+        val wasCaught = firewall.get(pos)?.run {  state == 0 } ?: false
+        firewall.values.forEach { it.move() }
+        wasCaught
     }
 
-    println("the severity of the trip was $minDelay")
-}
 
+    val minDelay = generateSequence(0) { it + 1 }.first { delay ->
+        val fwClone = firewall.map { (idx, scanner) -> idx to scanner.copy() }.toMap()
 
-// part2
-fun isSneaky(firewall: Map<Int, Int>, delay: Int = 0): Boolean {
-
-    val numLayers = firewall.map { it.key }.max()!!
-    val scanners = firewall.map { it.key to Scanner(it.value) }.toMap()
-
-    // apply delay
-    repeat(delay) {
-        scanners.values.forEach { it.move() }
-    }
-
-    if(delay%10000 == 0)  print(".")
-
-    (0..numLayers).map { pos ->
-        scanners.get(pos)?.run { if (state == 0) {
-            return false
+        isSneaky(fwClone).also {
+            firewall.values.forEach { it.move() }
         }
-        }
-        scanners.values.forEach { it.move() }
     }
 
-    return true
+    println("the min delay for sneak-through was $minDelay")
 }

@@ -1,29 +1,49 @@
-import org.jgrapht.alg.ConnectivityInspector
-import org.jgrapht.graph.DefaultEdge
-import org.jgrapht.graph.SimpleGraph
 import java.io.File
 
 /**
  * @author Holger Brandl
  */
-fun main(args: Array<String>) {
 
-    val data = File("day13_test_data.txt")
-        //    val data = File("day13_data.txt")
-        .readLines().map { it.split(" ", ", ") }
-        .associate { it[0].toInt() to it.drop(2).map { it.toInt() } }
+class Scanner(val range: Int) {
+    var state = 0
+    var isForward = true
 
-    val g = SimpleGraph<Int, DefaultEdge>(DefaultEdge::class.java)
+    fun move() {
+        state += if (isForward) +1 else -1
 
-    data.flatMap { it.value + it.value }.distinct().forEach { g.addVertex(it) }
-
-    data.toMap().map { (from, tos) ->
-        tos.forEach { to -> if (from != to) g.addEdge(from, to) }
+        if (state == (range - 1)) isForward = false
+        if (state == 0) isForward = true
     }
 
-    val connectedSets = ConnectivityInspector(g).connectedSets()
-    val componentSize = connectedSets.first { it.contains(0) }.size
+    override fun toString(): String {
+        return "Scanner($range, $state)"
+    }
+}
 
-    println("subgraph containing prog0 contained $componentSize elements")
-    println("num connected components is ${connectedSets.size}")
+fun main(args: Array<String>) {
+
+//        val firewall = File("day13_test_data.txt")
+    val firewall = File("day13_data.txt")
+        .readLines()
+        .map { it.split(": ").map(String::toInt) }
+        .associate { it[0] to it[1] }
+
+
+    val numLayers = firewall.map { it.key }.max()!!
+    val scanners = firewall.map { it.key to Scanner(it.value) }.toMap()
+
+    val sevScores = (0..numLayers).map { pos ->
+        scanners.get(pos)?.run {
+            if (state == 0) pos * range else null
+        }.also {
+            // move all scanners forward
+            println(scanners.entries)
+
+            scanners.values.forEach { it.move() }
+
+        }
+    }
+    val tripSeverity = sevScores.filterNotNull().sum()
+
+    println("the severity of the trip was $tripSeverity")
 }

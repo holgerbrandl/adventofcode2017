@@ -5,12 +5,12 @@
 fun main(args: Array<String>) {
 
     //    // puzzle input
-    //    var startA = 883L
-    //    var startB = 879L
+    val startA = 883L
+    val startB = 879L
 
     // test puzzle input
-    val startA = 65L
-    val startB = 8921L
+    //    val startA = 65L
+    //    val startB = 8921L
 
 
     val genAFac = 16807
@@ -32,20 +32,19 @@ fun main(args: Array<String>) {
     println("part1 $numMatches")
 
     // part2
-    //    val genDataA =
 
-    //    fun generateP2(start: Long, factor: Int, multipleOf: Int) = generateSequence(start) {
-    //        (it * factor % 2147483647).takeIf { it % multipleOf == 0L }
-    //    }.take(5_000_000).filterNotNull()
-    //
-    //
-    //    val zipped = generate(startA, genAFac, 4).zip(generate(startB, genBFac, 4)).toList()
-    //
-    //    val numP2Matches = zipped.sumBy { (genA, genB) ->
-    //        if (genA.lower16() == genB.lower16()) 1 else 0
-    //    }
-    //
-    //    println("part2 $numP2Matches")
+    fun generateP2(start: Long, factor: Int, multipleOf: Int) = generateSequence(start) {
+        (it * factor % 2147483647)
+    }.drop(1).filter {
+        it % multipleOf == 0L
+    }
 
+    val zipped = generateP2(startA, genAFac, 4).zip(generateP2(startB, genBFac, 8)).take(5_000_000)
+
+    val numP2Matches = zipped.sumBy { (genA, genB) ->
+        if (genA.lower16() == genB.lower16()) 1 else 0
+    }
+
+    println("part2 $numP2Matches")
 }
 
